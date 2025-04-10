@@ -25,8 +25,10 @@ class EmojiMemoryGame: ObservableObject {
         Theme(name: "Valuables", pairAmount: 6, color: "yellow", emojis: valueableEmojis),
         Theme(name: "Halloween", pairAmount: 4, color: "orange", emojis: halloweenEmojs)
     ]
-    static let currentTheme = themes[3]
+    static let sampleTheme = themes.randomElement()
+    static var currentTheme: Theme = sampleTheme ?? themes[1]
     static func createMemoryGame()->MemoryGame<String>{
+        
        
         //second part is the createCardContent fucntion
         
