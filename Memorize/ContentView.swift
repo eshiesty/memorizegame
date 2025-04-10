@@ -20,6 +20,11 @@ struct ContentView: View {
                 }
             }.padding().foregroundColor(.red)
             Spacer()
+            Button(action: {
+                viewModel.changeTheme()
+            }){
+                Text("New game")
+            }
         }
     }
 }

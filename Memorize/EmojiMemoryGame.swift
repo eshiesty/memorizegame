@@ -25,8 +25,16 @@ class EmojiMemoryGame: ObservableObject {
         Theme(name: "Valuables", pairAmount: 6, color: "yellow", emojis: valueableEmojis),
         Theme(name: "Halloween", pairAmount: 4, color: "orange", emojis: halloweenEmojs)
     ]
-    static let sampleTheme = themes.randomElement()
-    static var currentTheme: Theme = sampleTheme ?? themes[1]
+    static var sampleTheme = themes.randomElement()
+    static var currentTheme: Theme = sampleTheme ?? themes[0]
+    func changeTheme() {
+        print("Changing theme")
+        if let newTheme = EmojiMemoryGame.themes.randomElement() {
+            EmojiMemoryGame.currentTheme = newTheme
+            model = EmojiMemoryGame.createMemoryGame()
+            print("New theme is \(EmojiMemoryGame.currentTheme.name)")
+        }
+    }
     static func createMemoryGame()->MemoryGame<String>{
         
        
@@ -52,6 +60,12 @@ class EmojiMemoryGame: ObservableObject {
     }
     func getThemeName()->String{
         return EmojiMemoryGame.currentTheme.name
+    }
+    
+    
+    func newGame()->Void{
+        changeTheme()
+        
     }
     
     @Published private var model: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
