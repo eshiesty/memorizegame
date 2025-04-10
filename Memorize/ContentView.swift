@@ -10,78 +10,54 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var viewModel:EmojiMemoryGame
     var body: some View {
-            Text("Memorize!")
-            ScrollView{
-                LazyVGrid(columns:[GridItem(.adaptive(minimum: 70))]) {
-                    ForEach(viewModel.cards){ card in
-                        CardView(card:card).aspectRatio(2/3, contentMode: .fit).onTapGesture {
-                            viewModel.choose(card)
-                        }
+        Text(viewModel.getThemeName())
+        ScrollView{
+            LazyVGrid(columns:[GridItem(.adaptive(minimum: 70))]) {
+                ForEach(viewModel.cards){ card in
+                    CardView(card:card, viewModel:viewModel).aspectRatio(2/3, contentMode: .fit).onTapGesture {
+                        viewModel.choose(card)
                     }
-                }.padding().foregroundColor(.red)
-                Spacer()
-//            ThemeView
-//            HStack{
-//                
-//                
-//                remove
-//                Spacer()
-//                add
-//            }.padding(.horizontal).font(.largeTitle)
+                }
+            }.padding().foregroundColor(.red)
+            Spacer()
         }
     }
-    
-//    
-//        var remove: some View {
-//            Button{ emojiCount -= 1}
-//            label:{
-//                Image(systemName: "minus.circle")
-//            }
-//        }
-//        var add: some View {
-//            Button{ emojiCount += 1}
-//            label:{
-//                Image(systemName: "plus.circle")
-//            }
-//        }
-//    var ThemeView: some View{
-//        
-//            HStack{
-//              
-//                Button{ currentTheme = vehicleEmojis}
-//                label:{
-//                    Image(systemName: "car.circle")
-//                }
-//                Button{ currentTheme = animalEmojis}
-//                label:{
-//                    Image(systemName: "person.circle")
-//                }
-//                Button{ currentTheme = valueableEmojis}
-//                label:{
-//                    Image(systemName: "bag.circle")
-//                }
-//                
-//               
-//            }.padding(.horizontal).font(.largeTitle)
-//
-//        
-//    }
 }
 
 struct CardView: View{
     var card:MemoryGame<String>.Card
+    var viewModel: EmojiMemoryGame
 //    var content: String
 //    @State var isFaceUp: Bool = true
+    func getColor()->Color{
+        switch(viewModel.getCardColor()){
+        case "blue":
+            return Color.blue
+        case "red":
+                return Color.red
+        case "yellow":
+                return Color.yellow
+        case "orange":
+                return Color.orange
+        default:
+           return Color.gray
+        }
+    }
     var body: some View{
         ZStack {
             let shape = RoundedRectangle(cornerRadius: 20)
             if card.isFaceUp{
                 
                 shape.fill().foregroundColor(.white)
-                shape.stroke(lineWidth: 3)
+                shape.stroke(lineWidth: 3).foregroundColor(getColor())
                 Text(card.content).font(.largeTitle)
-            } else {
-                shape.fill()
+            } else if (card.isMatched){
+                shape.opacity(0)
+                
+            }
+            else{
+                shape.fill().foregroundColor(getColor())
+               
                 
             }
         }

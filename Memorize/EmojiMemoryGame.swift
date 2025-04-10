@@ -6,19 +6,51 @@
 //
 
 import Foundation
-import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
     static let vehicleEmojis = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🚚", "🚛", "🚜", "🛻", "🚲", "🛴", "🏍", "🛵", "🚤", "✈️", "🚁", "🚂", "🚆", "🚇"].shuffled()
     
     static let animalEmojis = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐯", "🦁", "🐮", "🐷", "🐸", "🐵", "🐔", "🐧", "🐦", "🐤", "🐺", "🦄", "🐝", "🐛", "🦋"].shuffled()
     static let valueableEmojis = ["💎", "💰", "🪙", "🏆", "🎖", "🥇", "💵", "💴", "💶", "💷", "📈", "📉", "💳", "🏦", "💸", "💲", "🤑", "💼", "⚖️", "🔑", "🏠", "🚗", "🛥", "🚀"].shuffled()
-    
+    static let halloweenEmojs = ["🎃", "👻", "🧛‍♂️", "👻", "🧟‍♀️","👽","👺"]
+    struct Theme {
+        let name: String
+        let pairAmount: Int
+        let color: String
+        let emojis: [String]
+    }
+    static let themes: [Theme] = [
+        Theme(name: "Vehicles", pairAmount: 10, color: "blue", emojis: vehicleEmojis),
+        Theme(name: "Animals", pairAmount: 8, color: "red", emojis: animalEmojis),
+        Theme(name: "Valuables", pairAmount: 6, color: "yellow", emojis: valueableEmojis),
+        Theme(name: "Halloween", pairAmount: 4, color: "orange", emojis: halloweenEmojs)
+    ]
+    static let currentTheme = themes[3]
     static func createMemoryGame()->MemoryGame<String>{
-        return MemoryGame<String>(numberOfPairsOfCards: 4){pairIndex in EmojiMemoryGame.vehicleEmojis[pairIndex]
+       
+        //second part is the createCardContent fucntion
+        
+        let safePairAmount: Int
+        if(currentTheme.emojis.count < currentTheme.pairAmount){
+            //bigger pairAmount than emojis
+            safePairAmount = currentTheme.emojis.count
+
+        } else {
+            //normal case
+           safePairAmount = currentTheme.pairAmount
+        }
+        
+        return MemoryGame<String>(numberOfPairsOfCards: safePairAmount
+        ){
+            pairIndex in currentTheme.emojis[pairIndex]
         }
     }
-    
+    func getCardColor()->String{
+        return EmojiMemoryGame.currentTheme.color
+    }
+    func getThemeName()->String{
+        return EmojiMemoryGame.currentTheme.name
+    }
     
     @Published private var model: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
     
