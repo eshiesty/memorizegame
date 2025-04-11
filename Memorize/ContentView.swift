@@ -20,12 +20,16 @@ struct ContentView: View {
                 }
             }.padding().foregroundColor(.red)
             Spacer()
+        }
+        HStack{
+            Text("Score: \(viewModel.getScore())")
+            Spacer()
             Button(action: {
                 viewModel.changeTheme()
             }){
                 Text("New game")
             }
-        }
+        }.padding(20)
     }
 }
 

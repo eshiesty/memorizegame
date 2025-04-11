@@ -12,7 +12,7 @@ class EmojiMemoryGame: ObservableObject {
     
     static let animalEmojis = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐨", "🐯", "🦁", "🐮", "🐷", "🐸", "🐵", "🐔", "🐧", "🐦", "🐤", "🐺", "🦄", "🐝", "🐛", "🦋"].shuffled()
     static let valueableEmojis = ["💎", "💰", "🪙", "🏆", "🎖", "🥇", "💵", "💴", "💶", "💷", "📈", "📉", "💳", "🏦", "💸", "💲", "🤑", "💼", "⚖️", "🔑", "🏠", "🚗", "🛥", "🚀"].shuffled()
-    static let halloweenEmojs = ["🎃", "👻", "🧛‍♂️", "👻", "🧟‍♀️","👽","👺"]
+    static let halloweenEmojs = ["🎃", "👻", "🧛‍♂️", "👹", "🧟‍♀️","👽","👺"]
     struct Theme {
         let name: String
         let pairAmount: Int
@@ -34,6 +34,10 @@ class EmojiMemoryGame: ObservableObject {
             model = EmojiMemoryGame.createMemoryGame()
             print("New theme is \(EmojiMemoryGame.currentTheme.name)")
         }
+    }
+    
+    func getScore()->Int{
+        return score
     }
     static func createMemoryGame()->MemoryGame<String>{
         
@@ -72,6 +76,9 @@ class EmojiMemoryGame: ObservableObject {
     
     var cards: Array<MemoryGame<String>.Card> {
         model.cards
+    }
+    var score: Int{
+        model.score
     }
     
     // MARK: - Intent(s)

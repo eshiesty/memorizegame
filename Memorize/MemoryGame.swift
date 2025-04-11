@@ -7,15 +7,28 @@
 
 struct MemoryGame<CardContent> where CardContent:Equatable {
     private(set) var cards: Array<Card>
-    
+    private(set) var score = 0
     private var indexOfTheOneAndOnlyFaceUpCard: Int?
     mutating func choose(_ card: Card){
         
         if let chosenIndex = cards.firstIndex(where: {$0.id == card.id}), !cards[chosenIndex].isMatched,!cards[chosenIndex].isFaceUp {
+          
             if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
                 if cards[chosenIndex].content == cards[potentialMatchIndex].content{
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
+                    score += 2
+                } else {
+                    if(cards[potentialMatchIndex].beenSeen == true){
+                        score -= 1
+                    } else {
+                        cards[potentialMatchIndex].beenSeen = true
+                    }
+                    if(cards[chosenIndex].beenSeen == true){
+                        score -= 1
+                    } else {
+                        cards[chosenIndex].beenSeen = true
+                    }
                 }
                 indexOfTheOneAndOnlyFaceUpCard = nil
             } else {
@@ -23,6 +36,14 @@ struct MemoryGame<CardContent> where CardContent:Equatable {
                     cards[index].isFaceUp = false
                 }
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
+                //second card been seen
+               
+                //first card been seen
+//                if(cards[indexOfTheOneAndOnlyFaceUpCard!].beenSeen == true){
+//                    score -= 1
+//                } else {
+//                    cards[indexOfTheOneAndOnlyFaceUpCard!].beenSeen = true
+//                }
             }
         cards[chosenIndex].isFaceUp.toggle()
         }
@@ -51,6 +72,7 @@ struct MemoryGame<CardContent> where CardContent:Equatable {
     struct Card:Identifiable {
         var isFaceUp: Bool = false
         var isMatched: Bool = false
+        var beenSeen: Bool = false
         var content: CardContent
         var id: Int
     }
